@@ -49,7 +49,8 @@ micro-ui-example/
 └── docs/
     ├── micro-frontend-architecture.md
     ├── shell-framework-decision.md
-    └── mfe-registration-patterns.md
+    ├── mfe-registration-patterns.md
+    └── state-management-patterns.md
 ```
 
 ## Quick Start
@@ -118,6 +119,7 @@ MFEs are registered via `manifest.json`:
 | [Architecture](docs/micro-frontend-architecture.md) | Full architecture guide with code examples |
 | [Shell Framework Decision](docs/shell-framework-decision.md) | Why Svelte 5 for the shell |
 | [Registration Patterns](docs/mfe-registration-patterns.md) | Static manifest vs runtime registration |
+| [State Management](docs/state-management-patterns.md) | Cross-MFE shared state and caching patterns |
 
 ## Why Svelte for the Shell?
 
