@@ -4,7 +4,7 @@
     {
       "id": "react-example",
       "name": "React Dashboard",
-      "entry": "http://localhost:5001/src/main.tsx",
+      "entry": "http://localhost:5001/remoteEntry.js",
       "route": "/react",
       "menu": {
         "label": "Dashboard",
@@ -20,7 +20,7 @@
     {
       "id": "vue-example",
       "name": "Vue Settings",
-      "entry": "http://localhost:5002/src/main.ts",
+      "entry": "http://localhost:5002/remoteEntry.js",
       "route": "/vue",
       "menu": {
         "label": "Settings",
@@ -31,12 +31,34 @@
     {
       "id": "svelte-example",
       "name": "Svelte Reports",
-      "entry": "http://localhost:5003/src/main.ts",
+      "entry": "http://localhost:5003/remoteEntry.js",
       "route": "/svelte",
       "menu": {
         "label": "Svelte App",
         "icon": "🔥",
         "order": 3
+      }
+    },
+    {
+      "id": "solid-example",
+      "name": "SolidJS App",
+      "entry": "http://localhost:5004/remoteEntry.js",
+      "route": "/solid",
+      "menu": {
+        "label": "SolidJS",
+        "icon": "⚡",
+        "order": 4
+      }
+    },
+    {
+      "id": "angular-example",
+      "name": "Angular App",
+      "entry": "http://localhost:5005/main.js",
+      "route": "/angular",
+      "menu": {
+        "label": "Angular",
+        "icon": "🅰️",
+        "order": 5
       }
     }
   ]

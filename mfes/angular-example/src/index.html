@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angular MFE - Standalone</title>
+  </head>
+  <body>
+    <app-root></app-root>
+    <script>
+      // Mock props for standalone development
+      window.__MFE_PROPS__ = {
+        container: document.body,
+        basePath: '/angular',
+        auth: {
+          user: { id: '1', name: 'Dev User', email: 'dev@example.com', roles: ['user', 'admin'] },
+          token: 'mock-token',
+          isAuthenticated: true,
+          login: () => console.log('Login called'),
+          logout: () => console.log('Logout called'),
+        },
+        eventBus: {
+          emit: (event, payload) => console.log('Event:', event, payload),
+          on: (event, handler) => {
+            console.log('Subscribed to:', event);
+            return () => console.log('Unsubscribed from:', event);
+          },
+        },
+        navigate: (path) => console.log('Navigate to:', path),
+        theme: 'dark',
+        navigation: {
+          registerRoutes: (routes) => console.log('Registered routes:', routes),
+          unregisterRoutes: () => console.log('Unregistered routes'),
+          currentPath: '/angular',
+        },
+        cache: {
+          get: (key) => null,
+          set: (key, value) => console.log('Cache set:', key, value),
+          clear: () => console.log('Cache cleared'),
+        },
+      };
+    </script>
+  </body>
+</html>

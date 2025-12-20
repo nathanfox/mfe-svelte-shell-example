@@ -1,0 +1,21 @@
+{
+  "name": "@micro-ui/svelte-example",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch & vite preview --port 5003",
+    "dev:standalone": "vite --port 5003",
+    "build": "vite build",
+    "preview": "vite preview --port 5003",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tsconfig/svelte": "^5.0.4",
+    "svelte": "^5.16.0",
+    "svelte-check": "^4.1.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.6"
+  }
+}

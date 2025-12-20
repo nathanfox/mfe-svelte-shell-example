@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Svelte MFE - Standalone</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #0f0f1a;
+        color: #e5e5e5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import { bootstrap, mount } from '/src/main.ts';
+
+      const container = document.getElementById('root');
+
+      const mockProps = {
+        container,
+        basePath: '/svelte',
+        auth: {
+          user: { id: '1', name: 'Dev User', email: 'dev@example.com', roles: ['user', 'admin'] },
+          token: 'mock-token',
+          isAuthenticated: true,
+          login: () => console.log('Login called'),
+          logout: () => console.log('Logout called'),
+        },
+        eventBus: {
+          emit: (event, payload) => console.log('Event:', event, payload),
+          on: (event, handler) => {
+            console.log('Subscribed to:', event);
+            return () => console.log('Unsubscribed from:', event);
+          },
+        },
+        navigate: (path) => console.log('Navigate to:', path),
+        theme: 'dark',
+        navigation: {
+          registerRoutes: (routes) => console.log('Registered routes:', routes),
+          unregisterRoutes: () => console.log('Unregistered routes'),
+          currentPath: '/svelte',
+        },
+        cache: {
+          get: (key) => null,
+          set: (key, value) => console.log('Cache set:', key, value),
+          clear: () => console.log('Cache cleared'),
+        },
+      };
+
+      await bootstrap(mockProps);
+      await mount(mockProps);
+    </script>
+  </body>
+</html>

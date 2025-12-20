@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { loadMfe, unloadMfe } from '../lib/federation';
   import { auth } from '../lib/auth.svelte';
   import { eventBus } from '../lib/eventBus';
@@ -16,12 +16,24 @@
   let { mfe, navigate, currentPath }: Props = $props();
 
   let container: HTMLElement;
-  let currentMfe: MfeRegistration | null = null;
+  let loadedMfeId: string | null = null;
+  let isLoading = false; // Non-reactive guard to prevent re-entry
+  let isMounted = false; // Track if component is mounted (DOM ready)
   let loading = $state(true);
   let error = $state<string | null>(null);
 
-  $effect(() => {
-    if (mfe && mfe.id !== currentMfe?.id) {
+  // Load MFE on mount - this guarantees container is ready
+  onMount(() => {
+    isMounted = true;
+    loadCurrentMfe();
+  });
+
+  // Watch for mfe prop changes (when navigating between MFEs)
+  // Only runs after initial mount, when container is guaranteed to exist
+  $effect.pre(() => {
+    const mfeId = mfe?.id;
+    // Only react to mfe.id changes after mount, not on initial load
+    if (isMounted && mfeId && mfeId !== loadedMfeId && !isLoading) {
       loadCurrentMfe();
     }
   });
@@ -44,14 +56,21 @@
   }
 
   async function loadCurrentMfe() {
+    // Guard against re-entry
+    if (isLoading) return;
+    isLoading = true;
     loading = true;
     error = null;
 
     // Unmount previous MFE and clean up its routes
-    if (currentMfe) {
-      unregisterRoutes(currentMfe.id);
-      await unloadMfe(currentMfe.id);
+    const prevMfeId = loadedMfeId;
+    if (prevMfeId) {
+      unregisterRoutes(prevMfeId);
+      await unloadMfe(prevMfeId);
     }
+
+    // Update loadedMfeId immediately
+    loadedMfeId = mfe.id;
 
     try {
       await loadMfe(mfe, container, {
@@ -69,7 +88,6 @@
         navigation: createNavigationApi(mfe.id),
         cache: stateCache.forMfe(mfe.id),
       });
-      currentMfe = mfe;
 
       // Emit navigation event
       eventBus.emit('navigation:changed', { path: currentPath, mfeId: mfe.id });
@@ -78,13 +96,14 @@
       console.error(`[Shell] Failed to load MFE ${mfe.id}:`, e);
     } finally {
       loading = false;
+      isLoading = false;
     }
   }
 
   onDestroy(async () => {
-    if (currentMfe) {
-      unregisterRoutes(currentMfe.id);
-      await unloadMfe(currentMfe.id);
+    if (loadedMfeId) {
+      unregisterRoutes(loadedMfeId);
+      await unloadMfe(loadedMfeId);
     }
   });
 </script>

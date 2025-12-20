@@ -38,6 +38,28 @@
         "icon": "🔥",
         "order": 3
       }
+    },
+    {
+      "id": "solid-example",
+      "name": "SolidJS App",
+      "entry": "/mfes/solid-example/dist/remoteEntry.js",
+      "route": "/solid",
+      "menu": {
+        "label": "SolidJS",
+        "icon": "⚡",
+        "order": 4
+      }
+    },
+    {
+      "id": "angular-example",
+      "name": "Angular App",
+      "entry": "/mfes/angular-example/dist/browser/main.js",
+      "route": "/angular",
+      "menu": {
+        "label": "Angular",
+        "icon": "🅰️",
+        "order": 5
+      }
     }
   ]
 }
