@@ -1,0 +1,84 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/
+.pnp.*
+
+# Build outputs
+dist/
+build/
+.output/
+out/
+
+# Framework-specific build/cache
+
+# Svelte / SvelteKit
+.svelte-kit/
+
+# Angular
+.angular/
+*.ngfactory.ts
+*.ngsummary.json
+
+# Vue / Nuxt
+.nuxt/
+.vue-tsc/
+
+# React / Next.js
+.next/
+
+# SolidJS
+.solid/
+
+# Vite
+.vite/
+
+# General caches
+.cache/
+.parcel-cache/
+.rollup.cache/
+*.tsbuildinfo
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Lock files (optional - uncomment if using single package manager)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Native Federation outputs
+remoteEntry.js.map

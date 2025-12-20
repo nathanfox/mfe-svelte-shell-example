@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "mfes": [
+    {
+      "id": "react-example",
+      "name": "React Dashboard",
+      "entry": "/mfes/react-example/dist/remoteEntry.js",
+      "route": "/react",
+      "menu": {
+        "label": "Dashboard",
+        "icon": "📊",
+        "order": 1,
+        "children": [
+          { "label": "Overview", "path": "/react", "icon": "🏠" },
+          { "label": "Analytics", "path": "/react/analytics", "icon": "📈" },
+          { "label": "Reports", "path": "/react/reports", "icon": "📄" }
+        ]
+      }
+    },
+    {
+      "id": "vue-example",
+      "name": "Vue Settings",
+      "entry": "/mfes/vue-example/dist/remoteEntry.js",
+      "route": "/vue",
+      "menu": {
+        "label": "Settings",
+        "icon": "⚙️",
+        "order": 2
+      }
+    },
+    {
+      "id": "svelte-example",
+      "name": "Svelte Reports",
+      "entry": "/mfes/svelte-example/dist/remoteEntry.js",
+      "route": "/svelte",
+      "menu": {
+        "label": "Svelte App",
+        "icon": "🔥",
+        "order": 3
+      }
+    }
+  ]
+}
