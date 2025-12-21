@@ -86,6 +86,16 @@ export async function unloadMfe(mfeId: string): Promise<void> {
       console.error(`[Federation] Failed to unmount MFE: ${mfeId}`, error);
     }
   }
+
+  // Clean up stylesheet if it was loaded
+  if (loadedStylesheets.has(mfeId)) {
+    const link = document.getElementById(`mfe-styles-${mfeId}`);
+    if (link) {
+      link.remove();
+      console.log(`[Federation] Removed styles for MFE: ${mfeId}`);
+    }
+    loadedStylesheets.delete(mfeId);
+  }
 }
 
 export async function unloadAllMfes(): Promise<void> {

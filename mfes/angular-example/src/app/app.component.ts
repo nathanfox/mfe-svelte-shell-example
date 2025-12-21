@@ -1,39 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MFE_PROPS } from './app.config';
 
 interface User {
   id: string;
   name: string;
   email: string;
   roles: string[];
-}
-
-interface AuthContext {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
-}
-
-interface EventBus {
-  emit: (event: string, payload: unknown) => void;
-  on: (event: string, handler: (payload: unknown) => void) => () => void;
-}
-
-interface MfeProps {
-  container: HTMLElement;
-  basePath: string;
-  auth: AuthContext;
-  eventBus: EventBus;
-  navigate: (path: string) => void;
-  theme: 'light' | 'dark';
-  navigation: {
-    registerRoutes: (routes: unknown[]) => void;
-    unregisterRoutes: () => void;
-    currentPath: string;
-  };
 }
 
 @Component({
@@ -481,6 +455,7 @@ interface MfeProps {
 })
 export class AppComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
+  private props = inject(MFE_PROPS, { optional: true });
 
   // Signals for reactive state
   count = signal(0);
@@ -504,10 +479,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private unsubNotification?: () => void;
   private unsubAuth?: () => void;
   private unsubNav?: () => void;
-
-  get props(): MfeProps | undefined {
-    return (window as unknown as { __MFE_PROPS__?: MfeProps }).__MFE_PROPS__;
-  }
 
   userName = computed(() => this.auth()?.user?.name ?? 'Guest');
   isAuthenticated = computed(() => this.auth()?.isAuthenticated ?? false);
