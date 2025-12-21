@@ -69,7 +69,7 @@ export async function mount(props: MfeProps): Promise<void> {
 
   navigation.registerRoutes(routes);
 
-  app = createApp(App, { auth, eventBus, navigate, basePath });
+  app = createApp(App, { auth, eventBus, navigate, basePath, currentPath: navigation.currentPath });
   app.mount(container);
 
   console.log('[Vue MFE] Mounted');

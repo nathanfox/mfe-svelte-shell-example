@@ -89,6 +89,7 @@ export async function mount(props: MfeProps): Promise<void> {
       eventBus={eventBus}
       navigate={navigate}
       basePath={basePath}
+      currentPath={navigation.currentPath}
     />
   );
 

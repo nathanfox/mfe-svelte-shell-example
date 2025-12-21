@@ -25,7 +25,12 @@
       "menu": {
         "label": "Settings",
         "icon": "⚙️",
-        "order": 2
+        "order": 2,
+        "children": [
+          { "label": "Settings", "path": "/vue", "icon": "⚙️" },
+          { "label": "Profile", "path": "/vue/profile", "icon": "👤" },
+          { "label": "Preferences", "path": "/vue/preferences", "icon": "🎨" }
+        ]
       }
     },
     {
@@ -34,9 +39,14 @@
       "entry": "http://localhost:5003/remoteEntry.js",
       "route": "/svelte",
       "menu": {
-        "label": "Svelte App",
+        "label": "Reports",
         "icon": "🔥",
-        "order": 3
+        "order": 3,
+        "children": [
+          { "label": "Reports", "path": "/svelte", "icon": "📊" },
+          { "label": "Charts", "path": "/svelte/charts", "icon": "📈" },
+          { "label": "Export", "path": "/svelte/export", "icon": "📤" }
+        ]
       }
     },
     {
@@ -47,7 +57,12 @@
       "menu": {
         "label": "SolidJS",
         "icon": "⚡",
-        "order": 4
+        "order": 4,
+        "children": [
+          { "label": "Home", "path": "/solid", "icon": "🏠" },
+          { "label": "Signals", "path": "/solid/signals", "icon": "⚡" },
+          { "label": "Store", "path": "/solid/store", "icon": "📦" }
+        ]
       }
     },
     {
@@ -58,7 +73,12 @@
       "menu": {
         "label": "Angular",
         "icon": "🅰️",
-        "order": 5
+        "order": 5,
+        "children": [
+          { "label": "Overview", "path": "/angular", "icon": "🅰️" },
+          { "label": "Components", "path": "/angular/components", "icon": "🧩" },
+          { "label": "Services", "path": "/angular/services", "icon": "⚙️" }
+        ]
       }
     }
   ]

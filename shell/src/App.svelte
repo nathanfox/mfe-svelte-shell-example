@@ -9,6 +9,7 @@
   import { loadManifest, type MfeRegistration } from './lib/manifest';
   import { auth } from './lib/auth.svelte';
   import { getRoutes, getDynamicRoutes } from './lib/routeRegistry.svelte';
+  import { eventBus } from './lib/eventBus';
   import type { MfeRoute, MenuChild } from './types/mfe';
 
   let mfes = $state<MfeRegistration[]>([]);
@@ -72,6 +73,9 @@
         m.activeWhen?.some((p) => path.startsWith(p))
     );
     activeMfe = mfe ?? null;
+
+    // Emit navigation event so MFEs can update their internal state
+    eventBus.emit('navigation:changed', { path });
   }
 
   function navigate(path: string) {

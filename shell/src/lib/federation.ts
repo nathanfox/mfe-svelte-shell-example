@@ -3,6 +3,32 @@ import type { MfeRegistration, MfeLifecycle, MfeProps } from '../types/mfe';
 // Cache for loaded MFE modules
 const loadedMfes = new Map<string, MfeLifecycle>();
 const mountedMfes = new Map<string, MfeProps>();
+const loadedStylesheets = new Set<string>();
+
+// Load CSS file for an MFE if it exists (Vue/Svelte extract CSS separately)
+async function loadMfeStyles(mfe: MfeRegistration): Promise<void> {
+  if (loadedStylesheets.has(mfe.id)) return;
+
+  // Derive CSS path from JS entry (remoteEntry.js -> remoteEntry.css)
+  const cssPath = mfe.entry.replace(/\.js$/, '.css');
+
+  try {
+    // Check if CSS file exists
+    const response = await fetch(cssPath, { method: 'HEAD' });
+    if (!response.ok) return;
+
+    // Create and append link element
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = cssPath;
+    link.id = `mfe-styles-${mfe.id}`;
+    document.head.appendChild(link);
+    loadedStylesheets.add(mfe.id);
+    console.log(`[Federation] Loaded styles for MFE: ${mfe.id}`);
+  } catch {
+    // CSS file doesn't exist (e.g., React uses CSS-in-JS), skip silently
+  }
+}
 
 export async function loadMfe(
   mfe: MfeRegistration,
@@ -15,6 +41,9 @@ export async function loadMfe(
 
   if (!lifecycle) {
     console.log(`[Federation] Loading MFE: ${mfe.id} from ${mfe.entry}`);
+
+    // Load CSS before JS to avoid flash of unstyled content
+    await loadMfeStyles(mfe);
 
     try {
       // Dynamically import the MFE's remote entry

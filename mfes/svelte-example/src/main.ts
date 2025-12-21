@@ -71,7 +71,7 @@ export async function mountMfe(props: MfeProps): Promise<void> {
 
   app = mount(App, {
     target: container,
-    props: { auth, eventBus, navigate, basePath },
+    props: { auth, eventBus, navigate, basePath, currentPath: navigation.currentPath },
   });
 
   console.log('[Svelte MFE] Mounted');
