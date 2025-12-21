@@ -28,23 +28,35 @@
     basePath: string;
   }
 
-  let { auth, eventBus, navigate, basePath }: Props = $props();
+  let { auth: initialAuth, eventBus, navigate, basePath }: Props = $props();
 
   let count = $state(0);
   let messages = $state<string[]>([]);
-  let unsubscribe: (() => void) | null = null;
+  let auth = $state<AuthContext>(initialAuth);
+  let unsubNotification: (() => void) | null = null;
+  let unsubAuth: (() => void) | null = null;
 
   onMount(() => {
-    unsubscribe = eventBus.on('notification:show', (payload) => {
+    unsubNotification = eventBus.on('notification:show', (payload) => {
       const msg = payload as { message: string };
       messages = [...messages, msg.message].slice(-5);
+    });
+
+    // Listen for auth changes from shell
+    unsubAuth = eventBus.on('auth:changed', (payload) => {
+      const authPayload = payload as { user: User | null; token: string | null; isAuthenticated: boolean };
+      auth = {
+        ...auth,
+        user: authPayload.user,
+        token: authPayload.token,
+        isAuthenticated: authPayload.isAuthenticated,
+      };
     });
   });
 
   onDestroy(() => {
-    if (unsubscribe) {
-      unsubscribe();
-    }
+    if (unsubNotification) unsubNotification();
+    if (unsubAuth) unsubAuth();
   });
 
   function increment() {

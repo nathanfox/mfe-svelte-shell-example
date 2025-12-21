@@ -27,18 +27,33 @@ interface AppProps {
   basePath: string;
 }
 
-export default function App({ auth, eventBus, navigate, basePath }: AppProps) {
+export default function App({ auth: initialAuth, eventBus, navigate, basePath }: AppProps) {
   const [count, setCount] = useState(0);
   const [messages, setMessages] = useState<string[]>([]);
+  const [auth, setAuth] = useState(initialAuth);
 
   useEffect(() => {
     // Listen for events from other MFEs
-    const unsubscribe = eventBus.on('notification:show', (payload) => {
+    const unsubNotification = eventBus.on('notification:show', (payload) => {
       const msg = payload as { message: string };
       setMessages((prev) => [...prev, msg.message]);
     });
 
-    return unsubscribe;
+    // Listen for auth changes from shell
+    const unsubAuth = eventBus.on('auth:changed', (payload) => {
+      const authPayload = payload as { user: User | null; token: string | null; isAuthenticated: boolean };
+      setAuth((prev) => ({
+        ...prev,
+        user: authPayload.user,
+        token: authPayload.token,
+        isAuthenticated: authPayload.isAuthenticated,
+      }));
+    });
+
+    return () => {
+      unsubNotification();
+      unsubAuth();
+    };
   }, [eventBus]);
 
   const handleIncrement = () => {

@@ -31,19 +31,32 @@ export default function App(props: AppProps) {
   // Signals are SolidJS's reactive primitives
   const [count, setCount] = createSignal(0);
   const [messages, setMessages] = createSignal<string[]>([]);
+  const [auth, setAuth] = createSignal<AuthContext>(props.auth);
 
   onMount(() => {
     console.log('[SolidJS] Component mounted');
 
     // Subscribe to events from other MFEs
-    const unsubscribe = props.eventBus.on('notification:show', (payload) => {
+    const unsubNotification = props.eventBus.on('notification:show', (payload) => {
       const msg = payload as { message: string };
       setMessages((prev) => [...prev, msg.message].slice(-5));
     });
 
+    // Listen for auth changes from shell
+    const unsubAuth = props.eventBus.on('auth:changed', (payload) => {
+      const authPayload = payload as { user: User | null; token: string | null; isAuthenticated: boolean };
+      setAuth((prev) => ({
+        ...prev,
+        user: authPayload.user,
+        token: authPayload.token,
+        isAuthenticated: authPayload.isAuthenticated,
+      }));
+    });
+
     // onCleanup registers cleanup logic
     onCleanup(() => {
-      unsubscribe();
+      unsubNotification();
+      unsubAuth();
       console.log('[SolidJS] Cleanup complete');
     });
   });
@@ -72,7 +85,7 @@ export default function App(props: AppProps) {
       <div style={styles.card}>
         <h1 style={styles.title}>SolidJS App</h1>
         <p style={styles.subtitle}>
-          Welcome, {props.auth.user?.name ?? 'Guest'}!
+          Welcome, {auth().user?.name ?? 'Guest'}!
         </p>
 
         <div style={styles.section}>
@@ -127,11 +140,11 @@ export default function App(props: AppProps) {
           </p>
           <p>
             <strong>Auth Status:</strong>{' '}
-            {props.auth.isAuthenticated ? 'Logged In' : 'Not Logged In'}
+            {auth().isAuthenticated ? 'Logged In' : 'Not Logged In'}
           </p>
-          <Show when={props.auth.user}>
+          <Show when={auth().user}>
             <p>
-              <strong>Roles:</strong> {props.auth.user!.roles.join(', ')}
+              <strong>Roles:</strong> {auth().user!.roles.join(', ')}
             </p>
           </Show>
         </div>

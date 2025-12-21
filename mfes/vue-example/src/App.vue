@@ -30,19 +30,31 @@ const props = defineProps<{
 
 const count = ref(0);
 const messages = ref<string[]>([]);
-let unsubscribe: (() => void) | null = null;
+const auth = ref<AuthContext>(props.auth);
+let unsubNotification: (() => void) | null = null;
+let unsubAuth: (() => void) | null = null;
 
 onMounted(() => {
-  unsubscribe = props.eventBus.on('notification:show', (payload) => {
+  unsubNotification = props.eventBus.on('notification:show', (payload) => {
     const msg = payload as { message: string };
     messages.value = [...messages.value, msg.message].slice(-5);
+  });
+
+  // Listen for auth changes from shell
+  unsubAuth = props.eventBus.on('auth:changed', (payload) => {
+    const authPayload = payload as { user: User | null; token: string | null; isAuthenticated: boolean };
+    auth.value = {
+      ...auth.value,
+      user: authPayload.user,
+      token: authPayload.token,
+      isAuthenticated: authPayload.isAuthenticated,
+    };
   });
 });
 
 onUnmounted(() => {
-  if (unsubscribe) {
-    unsubscribe();
-  }
+  if (unsubNotification) unsubNotification();
+  if (unsubAuth) unsubAuth();
 });
 
 function increment() {
@@ -62,7 +74,7 @@ function handleNavigate(path: string) {
   <div class="container">
     <div class="card">
       <h1 class="title">Vue Settings</h1>
-      <p class="subtitle">Welcome, {{ props.auth.user?.name ?? 'Guest' }}!</p>
+      <p class="subtitle">Welcome, {{ auth.user?.name ?? 'Guest' }}!</p>
 
       <div class="section">
         <h2 class="section-title">Counter Demo</h2>
@@ -96,8 +108,8 @@ function handleNavigate(path: string) {
 
       <div class="info">
         <p><strong>Base Path:</strong> {{ basePath }}</p>
-        <p><strong>Auth Status:</strong> {{ props.auth.isAuthenticated ? 'Logged In' : 'Not Logged In' }}</p>
-        <p v-if="props.auth.user"><strong>Roles:</strong> {{ props.auth.user.roles.join(', ') }}</p>
+        <p><strong>Auth Status:</strong> {{ auth.isAuthenticated ? 'Logged In' : 'Not Logged In' }}</p>
+        <p v-if="auth.user"><strong>Roles:</strong> {{ auth.user.roles.join(', ') }}</p>
       </div>
     </div>
   </div>

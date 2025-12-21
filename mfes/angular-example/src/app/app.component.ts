@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface User {
@@ -187,16 +187,20 @@ interface MfeProps {
   `],
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
+
   count = 0;
   messages: string[] = [];
-  private unsubscribe?: () => void;
+  private auth: { user: User | null; token: string | null; isAuthenticated: boolean } | null = null;
+  private unsubNotification?: () => void;
+  private unsubAuth?: () => void;
 
   get props(): MfeProps | undefined {
     return (window as unknown as { __MFE_PROPS__?: MfeProps }).__MFE_PROPS__;
   }
 
   get userName(): string {
-    return this.props?.auth.user?.name ?? 'Guest';
+    return this.auth?.user?.name ?? 'Guest';
   }
 
   get basePath(): string {
@@ -204,27 +208,48 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   get isAuthenticated(): boolean {
-    return this.props?.auth.isAuthenticated ?? false;
+    return this.auth?.isAuthenticated ?? false;
   }
 
   get userRoles(): string | null {
-    const roles = this.props?.auth.user?.roles;
+    const roles = this.auth?.user?.roles;
     return roles ? roles.join(', ') : null;
   }
 
   ngOnInit(): void {
+    // Initialize auth from props
+    if (this.props?.auth) {
+      this.auth = {
+        user: this.props.auth.user,
+        token: this.props.auth.token,
+        isAuthenticated: this.props.auth.isAuthenticated,
+      };
+    }
+
     if (this.props?.eventBus) {
-      this.unsubscribe = this.props.eventBus.on('notification:show', (payload) => {
+      this.unsubNotification = this.props.eventBus.on('notification:show', (payload) => {
         const msg = payload as { message: string };
         this.messages = [...this.messages, msg.message].slice(-5);
+        this.cdr.markForCheck();
+      });
+
+      // Listen for auth changes from shell
+      this.unsubAuth = this.props.eventBus.on('auth:changed', (payload) => {
+        const authPayload = payload as { user: User | null; token: string | null; isAuthenticated: boolean };
+        this.auth = {
+          user: authPayload.user,
+          token: authPayload.token,
+          isAuthenticated: authPayload.isAuthenticated,
+        };
+        // In zoneless mode, we must manually trigger change detection for external callbacks
+        this.cdr.markForCheck();
       });
     }
   }
 
   ngOnDestroy(): void {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
+    if (this.unsubNotification) this.unsubNotification();
+    if (this.unsubAuth) this.unsubAuth();
   }
 
   increment(): void {

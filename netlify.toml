@@ -1,0 +1,15 @@
+[build]
+  command = "npm run build"
+  publish = "shell/dist"
+
+# SPA fallback - serve index.html for client-side routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cache MFE bundles aggressively (they have hashed names)
+[[headers]]
+  for = "/mfes/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

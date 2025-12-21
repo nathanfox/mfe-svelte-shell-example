@@ -1,0 +1,15 @@
+{
+  "name": "micro-ui-example",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:mfes && npm run build:shell && npm run copy:mfes",
+    "build:mfes": "npm run build:react && npm run build:vue && npm run build:svelte && npm run build:solid && npm run build:angular",
+    "build:react": "cd mfes/react-example && npm ci && npm run build",
+    "build:vue": "cd mfes/vue-example && npm ci && npm run build",
+    "build:svelte": "cd mfes/svelte-example && npm ci && npm run build",
+    "build:solid": "cd mfes/solid-example && npm ci && npm run build",
+    "build:angular": "cd mfes/angular-example && npm ci && npm run build",
+    "build:shell": "cd shell && npm ci && npm run build",
+    "copy:mfes": "mkdir -p shell/dist/mfes && cp -r mfes/react-example/dist shell/dist/mfes/react-example/ && cp -r mfes/vue-example/dist shell/dist/mfes/vue-example/ && cp -r mfes/svelte-example/dist shell/dist/mfes/svelte-example/ && cp -r mfes/solid-example/dist shell/dist/mfes/solid-example/ && cp -r mfes/angular-example/dist shell/dist/mfes/angular-example/"
+  }
+}

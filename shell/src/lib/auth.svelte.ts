@@ -1,4 +1,5 @@
 import type { User, AuthContext } from '../types/mfe';
+import { eventBus } from './eventBus';
 
 function createAuth(): AuthContext {
   let user = $state<User | null>(null);
@@ -24,11 +25,17 @@ function createAuth(): AuthContext {
         roles: ['user', 'admin'],
       };
       token = 'mock-jwt-token';
+
+      // Notify MFEs of auth change
+      eventBus.emit('auth:changed', { user, token, isAuthenticated: true });
     },
 
     logout() {
       user = null;
       token = null;
+
+      // Notify MFEs of auth change
+      eventBus.emit('auth:changed', { user: null, token: null, isAuthenticated: false });
     },
   };
 }
