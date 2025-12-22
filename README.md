@@ -55,16 +55,50 @@ mfe-svelte-shell-example/
 
 ## Quick Start
 
+### Development
+
+First, install dependencies for each app:
+
 ```bash
-# Install dependencies
+# Install root dependencies (concurrently)
 npm install
 
-# Start development server (shell + all MFEs)
-npm run dev
+# Install shell dependencies
+cd shell && npm install && cd ..
 
-# Build for production
+# Install MFE dependencies
+cd mfes/react-example && npm install && cd ../..
+cd mfes/vue-example && npm install && cd ../..
+cd mfes/svelte-example && npm install && cd ../..
+cd mfes/solid-example && npm install && cd ../..
+cd mfes/angular-example && npm install && cd ../..
+```
+
+Then start all apps:
+
+```bash
+# Start shell + all MFEs concurrently
+npm run dev
+```
+
+This runs:
+- **Shell** at http://localhost:5000
+- **React MFE** at http://localhost:5001
+- **Vue MFE** at http://localhost:5002
+- **Svelte MFE** at http://localhost:5003
+- **SolidJS MFE** at http://localhost:5004
+- **Angular MFE** at http://localhost:5005
+
+Open http://localhost:5000 to see the shell with all MFEs.
+
+### Production Build
+
+```bash
+# Build all apps and combine into shell/dist
 npm run build
 ```
+
+The output in `shell/dist/` can be deployed to any static hosting (Netlify, Vercel, GitHub Pages, etc.).
 
 ## Key Concepts
 
