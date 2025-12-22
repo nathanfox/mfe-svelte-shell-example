@@ -90,7 +90,7 @@ See [mfe-registration-patterns.md](./mfe-registration-patterns.md) for alternati
 ## Project Structure
 
 ```
-micro-ui-example/
+mfe-svelte-shell-example/
 ├── shell/                          # Svelte 5 shell application
 │   ├── src/
 │   │   ├── App.svelte              # Root component

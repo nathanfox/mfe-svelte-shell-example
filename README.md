@@ -36,7 +36,7 @@ This repository serves as a **pattern library for GenAI agents** and developers 
 ## Project Structure
 
 ```
-micro-ui-example/
+mfe-svelte-shell-example/
 ├── shell/                    # Svelte 5 shell application
 ├── mfes/
 │   ├── react-example/        # React 18 micro-frontend

@@ -1,5 +1,5 @@
 {
-  "name": "micro-ui-example",
+  "name": "mfe-svelte-shell-example",
   "private": true,
   "scripts": {
     "build": "npm run build:mfes && npm run build:shell && npm run copy:mfes",

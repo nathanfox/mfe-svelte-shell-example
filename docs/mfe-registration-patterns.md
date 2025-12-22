@@ -732,7 +732,7 @@ For a **reference implementation designed for GenAI agents**, the static manifes
 ### Implementation Strategy
 
 ```
-micro-ui-example/
+mfe-svelte-shell-example/
 ├── shell/                          # Svelte shell application
 │   ├── public/
 │   │   └── manifest.json           # Static MFE manifest
