@@ -37,13 +37,13 @@ export async function loadMfe(
 ): Promise<void> {
   const fullProps: MfeProps = { ...props, container };
 
+  // Always ensure CSS is loaded (it may have been removed on unmount)
+  await loadMfeStyles(mfe);
+
   let lifecycle = loadedMfes.get(mfe.id);
 
   if (!lifecycle) {
     console.log(`[Federation] Loading MFE: ${mfe.id} from ${mfe.entry}`);
-
-    // Load CSS before JS to avoid flash of unstyled content
-    await loadMfeStyles(mfe);
 
     try {
       // Dynamically import the MFE's remote entry

@@ -16,6 +16,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    cssCodeSplit: false,
     lib: {
       entry: 'src/main.ts',
       name: 'svelteExample',
@@ -25,6 +26,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         entryFileNames: 'remoteEntry.js',
+        assetFileNames: 'assets/[name][extname]',
       },
     },
   },
