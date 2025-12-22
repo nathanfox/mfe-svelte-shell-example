@@ -4,7 +4,7 @@
     {
       "id": "react-example",
       "name": "React Dashboard",
-      "entry": "/mfes/react-example/dist/remoteEntry.js",
+      "entry": "/mfes/react-example/remoteEntry.js",
       "route": "/react",
       "menu": {
         "label": "Dashboard",
@@ -20,7 +20,7 @@
     {
       "id": "vue-example",
       "name": "Vue Settings",
-      "entry": "/mfes/vue-example/dist/remoteEntry.js",
+      "entry": "/mfes/vue-example/remoteEntry.js",
       "route": "/vue",
       "menu": {
         "label": "Settings",
@@ -36,7 +36,7 @@
     {
       "id": "svelte-example",
       "name": "Svelte Reports",
-      "entry": "/mfes/svelte-example/dist/remoteEntry.js",
+      "entry": "/mfes/svelte-example/remoteEntry.js",
       "route": "/svelte",
       "menu": {
         "label": "Reports",
@@ -52,7 +52,7 @@
     {
       "id": "solid-example",
       "name": "SolidJS App",
-      "entry": "/mfes/solid-example/dist/remoteEntry.js",
+      "entry": "/mfes/solid-example/remoteEntry.js",
       "route": "/solid",
       "menu": {
         "label": "SolidJS",
@@ -68,7 +68,7 @@
     {
       "id": "angular-example",
       "name": "Angular App",
-      "entry": "/mfes/angular-example/dist/browser/main.js",
+      "entry": "/mfes/angular-example/browser/main.js",
       "route": "/angular",
       "menu": {
         "label": "Angular",
