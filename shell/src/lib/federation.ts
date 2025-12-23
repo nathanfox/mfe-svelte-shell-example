@@ -9,35 +9,46 @@ const loadedStylesheets = new Set<string>();
 async function loadMfeStyles(mfe: MfeRegistration): Promise<void> {
   if (loadedStylesheets.has(mfe.id)) return;
 
-  // Derive CSS path from JS entry (remoteEntry.js -> remoteEntry.css)
-  const cssPath = mfe.entry.replace(/\.js$/, '.css');
+  // Derive CSS path from JS entry
+  // Try assets/ subfolder first (Vite default), then same directory as fallback
+  const basePath = mfe.entry.substring(0, mfe.entry.lastIndexOf('/'));
+  const fileName = mfe.entry.substring(mfe.entry.lastIndexOf('/') + 1).replace(/\.js$/, '.css');
+  const cssPaths = [
+    `${basePath}/assets/${fileName}`,  // Vite default: assets/remoteEntry.css
+    `${basePath}/${fileName}`,          // Fallback: remoteEntry.css (same dir)
+  ];
 
-  try {
-    // Check if CSS file exists
-    const response = await fetch(cssPath, { method: 'HEAD' });
-    if (!response.ok) return;
+  for (const cssPath of cssPaths) {
+    try {
+      // Check if CSS file exists
+      const response = await fetch(cssPath, { method: 'HEAD' });
+      if (!response.ok) continue;
 
-    // Create and append link element, wait for it to load
-    await new Promise<void>((resolve, reject) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = cssPath;
-      link.id = `mfe-styles-${mfe.id}`;
-      link.onload = () => {
-        console.log(`[Federation] Loaded styles for MFE: ${mfe.id}`);
-        resolve();
-      };
-      link.onerror = () => {
-        console.warn(`[Federation] Failed to load styles for MFE: ${mfe.id}`);
-        reject(new Error(`Failed to load CSS: ${cssPath}`));
-      };
-      document.head.appendChild(link);
-    });
+      // Create and append link element, wait for it to load
+      await new Promise<void>((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = cssPath;
+        link.id = `mfe-styles-${mfe.id}`;
+        link.onload = () => {
+          console.log(`[Federation] Loaded styles for MFE: ${mfe.id} from ${cssPath}`);
+          resolve();
+        };
+        link.onerror = () => {
+          console.warn(`[Federation] Failed to load styles for MFE: ${mfe.id}`);
+          reject(new Error(`Failed to load CSS: ${cssPath}`));
+        };
+        document.head.appendChild(link);
+      });
 
-    loadedStylesheets.add(mfe.id);
-  } catch {
-    // CSS file doesn't exist or failed to load, continue without styles
+      loadedStylesheets.add(mfe.id);
+      return; // Successfully loaded, exit the loop
+    } catch {
+      // This path didn't work, try the next one
+      continue;
+    }
   }
+  // No CSS found at any path - that's okay, some MFEs don't have external CSS
 }
 
 export async function loadMfe(
