@@ -2,6 +2,8 @@
 
 A reference implementation of a micro-frontend architecture demonstrating framework-agnostic patterns for building scalable frontend applications.
 
+**Live Demo:** https://mfe-svelte-shell-example.nathanfox.net
+
 ## Purpose
 
 This repository serves as a **pattern library for GenAI agents** and developers to understand and implement micro-frontend architectures. It demonstrates:
