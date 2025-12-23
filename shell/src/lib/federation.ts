@@ -24,7 +24,7 @@ async function loadMfeStyles(mfe: MfeRegistration): Promise<void> {
       const response = await fetch(cssPath, { method: 'HEAD' });
       if (!response.ok) continue;
 
-      // Create and append link element, wait for it to load
+      // Create and append link element, wait for it to load to prevent FOUC
       await new Promise<void>((resolve, reject) => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
