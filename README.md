@@ -150,6 +150,7 @@ MFEs are registered via `manifest.json`:
 
 | Document | Description |
 |----------|-------------|
+| [MFE Loading Guide](docs/mfe-loading-guide.md) | How MFEs load into the shell, requirements, and examples |
 | [Architecture](docs/micro-frontend-architecture.md) | Full architecture guide with code examples |
 | [Shell Framework Decision](docs/shell-framework-decision.md) | Why Svelte 5 for the shell |
 | [Registration Patterns](docs/mfe-registration-patterns.md) | Static manifest vs runtime registration |
