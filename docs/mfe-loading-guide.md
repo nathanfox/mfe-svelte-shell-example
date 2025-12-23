@@ -327,12 +327,47 @@ export async function unmount(): Promise<void> {
 
 ### How CSS is Loaded
 
-The shell automatically loads CSS files that match the MFE entry point:
+The shell automatically loads CSS files that match the MFE entry point. It checks multiple locations to support different build configurations:
 
 1. If entry is `/mfes/my-mfe/remoteEntry.js`
-2. Shell checks for `/mfes/my-mfe/remoteEntry.css`
-3. If found, creates a `<link>` tag in `<head>`
-4. On unmount, the stylesheet is removed
+2. Shell checks for CSS in this order:
+   - `/mfes/my-mfe/assets/remoteEntry.css` (Vite default output)
+   - `/mfes/my-mfe/remoteEntry.css` (same directory fallback)
+3. First found CSS file is loaded via `<link>` tag in `<head>`
+4. Shell waits for the stylesheet to fully load before mounting the MFE
+5. On unmount, the stylesheet is removed
+
+### Vite Configuration for CSS
+
+By default, Vite outputs CSS to an `assets/` subfolder. This is the recommended configuration:
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  build: {
+    cssCodeSplit: false,  // Bundle all CSS together
+    lib: {
+      entry: 'src/main.ts',
+      formats: ['es'],
+      fileName: 'remoteEntry',
+    },
+    rollupOptions: {
+      output: {
+        entryFileNames: 'remoteEntry.js',
+        assetFileNames: 'assets/[name][extname]',  // CSS goes to assets/
+      },
+    },
+  },
+});
+```
+
+This produces:
+```
+dist/
+├── remoteEntry.js
+└── assets/
+    └── remoteEntry.css
+```
 
 ### CSS Best Practices
 
@@ -472,7 +507,8 @@ mfes/my-mfe/
 │   └── components/
 ├── dist/
 │   ├── remoteEntry.js   # Built entry point
-│   └── remoteEntry.css  # Extracted styles (if any)
+│   └── assets/
+│       └── remoteEntry.css  # Extracted styles (Vite default)
 ├── package.json
 ├── vite.config.ts
 └── tsconfig.json
