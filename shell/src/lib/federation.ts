@@ -17,16 +17,26 @@ async function loadMfeStyles(mfe: MfeRegistration): Promise<void> {
     const response = await fetch(cssPath, { method: 'HEAD' });
     if (!response.ok) return;
 
-    // Create and append link element
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = cssPath;
-    link.id = `mfe-styles-${mfe.id}`;
-    document.head.appendChild(link);
+    // Create and append link element, wait for it to load
+    await new Promise<void>((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = cssPath;
+      link.id = `mfe-styles-${mfe.id}`;
+      link.onload = () => {
+        console.log(`[Federation] Loaded styles for MFE: ${mfe.id}`);
+        resolve();
+      };
+      link.onerror = () => {
+        console.warn(`[Federation] Failed to load styles for MFE: ${mfe.id}`);
+        reject(new Error(`Failed to load CSS: ${cssPath}`));
+      };
+      document.head.appendChild(link);
+    });
+
     loadedStylesheets.add(mfe.id);
-    console.log(`[Federation] Loaded styles for MFE: ${mfe.id}`);
   } catch {
-    // CSS file doesn't exist (e.g., React uses CSS-in-JS), skip silently
+    // CSS file doesn't exist or failed to load, continue without styles
   }
 }
 
