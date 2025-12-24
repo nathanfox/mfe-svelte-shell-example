@@ -157,6 +157,7 @@ MFEs are registered via `manifest.json`:
 | [Shell Framework Decision](docs/shell-framework-decision.md) | Why Svelte 5 for the shell |
 | [Registration Patterns](docs/mfe-registration-patterns.md) | Static manifest vs runtime registration |
 | [State Management](docs/state-management-patterns.md) | Cross-MFE shared state and caching patterns |
+| [Troubleshooting](docs/troubleshooting.md) | Common issues and solutions (CSS, Svelte 5, Netlify, Angular) |
 
 ## Why Svelte for the Shell?
 
